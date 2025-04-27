@@ -5,6 +5,19 @@ if(CMAKE_COMPILER_IS_GNUCXX OR CMAKE_CXX_COMPILER_ID MATCHES "Clang")
   add_compile_options(-Wall -Wextra -Wpedantic)
 endif()
 
+
+# FetchContent for the yaml-cpp
+include(FetchContent)
+FetchContent_Declare(
+  yaml-cpp
+  GIT_REPOSITORY https://github.com/jbeder/yaml-cpp.git
+  GIT_TAG master # Can be a tag (yaml-cpp-x.x.x), a commit hash, or a branch name (master)
+)
+FetchContent_MakeAvailable(yaml-cpp)
+#############################
+
+
+
 # find dependencies
 find_package(ament_cmake REQUIRED)
 find_package(rclcpp REQUIRED)
@@ -13,15 +26,11 @@ find_package(std_msgs REQUIRED)
 # find_package(eigen3_cmake_module REQUIRED)
 find_package(eigen-quadprog REQUIRED)
 find_package(Eigen3            REQUIRED)
-find_package(yaml-cpp          REQUIRED)
 find_package(eigen-quadprog    REQUIRED)
 
-
+# for eigen-quadprog
 set(EIGEN_QUADPROG_INCLUDE_DIR "/usr/include/eigen-quadprog")
-# include_directories(
-#   include
 
-# )
 
 #am
 file(GLOB SWARM_AM_SOURCES
@@ -34,25 +43,25 @@ add_library(lib_am_swarm
 target_include_directories(lib_am_swarm PUBLIC
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/swarm/am>
             $<INSTALL_INTERFACE:include/swarm/am>
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/swarm/common>
+            $<INSTALL_INTERFACE:include/swarm/common>
             ${EIGEN_QUADPROG_INCLUDE_DIR}
           )            
 
 
 ament_target_dependencies(lib_am_swarm
             rclcpp
-            yaml-cpp
-            
+            ament_index_cpp
           )           
-target_link_libraries(lib_am_swarm  Eigen3::Eigen )
+target_link_libraries(lib_am_swarm  
+            Eigen3::Eigen 
+            yaml-cpp::yaml-cpp)
 
 
 
 add_executable(swarm_am_nav src/main_am_swarm.cpp)
-target_link_libraries(swarm_am_nav lib_am_swarm ) #eigen-quadprog yaml-cpp ${catkin_LIBRARIES})
-ament_target_dependencies(swarm_am_nav
-  rclcpp
-  std_msgs
-)
+target_link_libraries(swarm_am_nav lib_am_swarm ) 
+
 
 #scp
 file(GLOB SWARM_SCP_SOURCES
@@ -65,21 +74,23 @@ add_library(lib_scp_swarm
 target_include_directories(lib_scp_swarm PUBLIC
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/swarm/scp>
             $<INSTALL_INTERFACE:include/swarm/scp>
+            $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/swarm/common>
+            $<INSTALL_INTERFACE:include/swarm/common>
             ${EIGEN_QUADPROG_INCLUDE_DIR}
           )
+          
 ament_target_dependencies(lib_scp_swarm
             rclcpp
-            yaml-cpp
+            ament_index_cpp
           )
 
-target_link_libraries(lib_am_swarm  Eigen3::Eigen )          
+target_link_libraries(lib_scp_swarm 
+            Eigen3::Eigen 
+            yaml-cpp::yaml-cpp)          
 
 add_executable(swarm_scp_nav src/main_scp_swarm.cpp)
-target_link_libraries(swarm_scp_nav lib_scp_swarm)
-ament_target_dependencies(swarm_scp_nav
-  rclcpp
-  std_msgs
-)
+target_link_libraries(swarm_scp_nav lib_scp_swarm )
+
 
 install(
   TARGETS
@@ -94,13 +105,23 @@ install(
 
 
 install(
-  DIRECTORY include/swarm/am
-  DESTINATION include/swarm/
+  DIRECTORY include/swarm/am/
+  DESTINATION include/swarm/am
 )
 
 install(
-  DIRECTORY include/swarm/scp
-  DESTINATION include/swarm/
+  DIRECTORY include/swarm/scp/
+  DESTINATION include/swarm/scp
+)
+
+install(
+  DIRECTORY include/swarm/common/
+  DESTINATION include/swarm/common
+)
+
+install(
+  DIRECTORY include/swarm/config/
+  DESTINATION share/${PROJECT_NAME}/config
 )
 
 
