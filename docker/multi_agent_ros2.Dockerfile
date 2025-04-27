@@ -18,7 +18,14 @@ RUN apt-get install --no-install-recommends -y \
 RUN add-apt-repository ppa:kisak/kisak-mesa && \
     apt-get update && apt-get upgrade -y &&\
     apt-get install libxcb-cursor0 -y && \
-    apt-get install ffmpeg python3-opengl -y
+    apt-get install ffmpeg python3-opengl -y 
+    
+RUN curl -1sLf \
+  'https://dl.cloudsmith.io/public/mc-rtc/stable/setup.deb.sh' \
+  | sudo -E bash
+RUN apt install libeigen-quadprog-dev
+
+RUN ln -s /usr/include/eigen3/Eigen /usr/include/Eigen
 
 RUN pip3 install matplotlib PyQt5 dill pandas pyqtgraph
 

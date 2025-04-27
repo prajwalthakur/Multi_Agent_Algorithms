@@ -2,6 +2,7 @@
 import os
 import numpy as np
 import matplotlib
+import time
 matplotlib.use('Qt5Agg')
 from ament_index_python.packages import get_package_share_directory
 
@@ -203,20 +204,40 @@ class visualizer_class(Node):
         ax.add_line(track_line)  
         
                 
-    def spin(self):
-        plt.ion()
-        self.robot_fig.show()
-        self.get_logger().info("vehicle_sim_node spinning")
-        # plt.show()
-        rclpy.spin(self)
-        plt.close(self.robot_fig)
+    # def spin(self):
+    #     plt.ion()
+    #     self.robot_fig.show()
+    #     self.get_logger().info("vehicle_sim_node spinning")
+    #     # plt.show()
+    #     rclpy.spin(self)
+    #     plt.close(self.robot_fig)
 
-def main():
-    #plt.switch_backend("Qt4Agg")
-    rclpy.init()
-    visualizer_class_node = visualizer_class()
-    visualizer_class_node.spin()
+# def main():
+#     #plt.switch_backend("Qt4Agg")
+#     rclpy.init()
+#     visualizer_class_node = visualizer_class()
+#     visualizer_class_node.spin()
+#     rclpy.shutdown()
+
+def main(args=None):
+    rclpy.init(args=args)
+    node = visualizer_class()
+
+    plt.ion()
+    node.robot_fig.show()
+
+    # Keep running until user closes the plot
+    try:
+        while plt.fignum_exists(node.robot_fig.number):
+            rclpy.spin_once(node, timeout_sec=0.01)  # Spin only a little at a time
+            node.robot_fig.canvas.flush_events()
+            plt.pause(0.01)
+    except KeyboardInterrupt:
+        pass
+
+    node.destroy_node()
     rclpy.shutdown()
+    plt.close(node.robot_fig)
 
 if __name__=='__main__':
     main()
