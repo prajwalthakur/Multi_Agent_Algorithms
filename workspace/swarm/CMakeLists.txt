@@ -29,9 +29,8 @@ find_package(Eigen3            REQUIRED)
 find_package(eigen-quadprog    REQUIRED)
 
 # for eigen-quadprog
-set(EIGEN_QUADPROG_INCLUDE_DIR "/usr/include/eigen-quadprog")
-
-
+# set(EIGEN_QUADPROG_INCLUDE_DIR "/usr/include/eigen-quadprog")
+# find_package(eigen-quadprog REQUIRED)
 #am
 file(GLOB SWARM_AM_SOURCES
     "${CMAKE_CURRENT_SOURCE_DIR}/src/algorithm/am/*.cpp"
@@ -45,17 +44,19 @@ target_include_directories(lib_am_swarm PUBLIC
             $<INSTALL_INTERFACE:include/swarm/am>
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/swarm/common>
             $<INSTALL_INTERFACE:include/swarm/common>
-            ${EIGEN_QUADPROG_INCLUDE_DIR}
+            
           )            
 
-
+  #${EIGEN_QUADPROG_INCLUDE_DIR}
 ament_target_dependencies(lib_am_swarm
             rclcpp
             ament_index_cpp
           )           
 target_link_libraries(lib_am_swarm  
             Eigen3::Eigen 
-            yaml-cpp::yaml-cpp)
+            yaml-cpp::yaml-cpp
+            eigen-quadprog::eigen-quadprog
+            )
 
 
 
@@ -76,9 +77,9 @@ target_include_directories(lib_scp_swarm PUBLIC
             $<INSTALL_INTERFACE:include/swarm/scp>
             $<BUILD_INTERFACE:${CMAKE_CURRENT_SOURCE_DIR}/include/swarm/common>
             $<INSTALL_INTERFACE:include/swarm/common>
-            ${EIGEN_QUADPROG_INCLUDE_DIR}
+            
           )
-          
+#${EIGEN_QUADPROG_INCLUDE_DIR}          
 ament_target_dependencies(lib_scp_swarm
             rclcpp
             ament_index_cpp
@@ -86,7 +87,8 @@ ament_target_dependencies(lib_scp_swarm
 
 target_link_libraries(lib_scp_swarm 
             Eigen3::Eigen 
-            yaml-cpp::yaml-cpp)          
+            yaml-cpp::yaml-cpp
+            eigen-quadprog::eigen-quadprog)          
 
 add_executable(swarm_scp_nav src/main_scp_swarm.cpp)
 target_link_libraries(swarm_scp_nav lib_scp_swarm )
