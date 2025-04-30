@@ -19,9 +19,12 @@ MIT
 
 
 ## Use Case
-I initiated this project to independently study algorithms and software development for autonomous vehicle systems. This repository is also available for your personal use in studying, education, research, or development.
+I initiated this project to get familarized with the algorithms and software development for multi agent systems. This repository is also available for your personal use in studying, education, research, or development.
 
 If this project supports your work or contributes to your tasks, please feel free to inform me by starring the repository.
+
+
+Acknowledgement: This project is based on the original SCP-based multi-agent planner developed at UofT [https://github.com/utiasDSL/AMSwarm](https://github.com/utiasDSL/AMSwarm)
 
 
 ## Contribution

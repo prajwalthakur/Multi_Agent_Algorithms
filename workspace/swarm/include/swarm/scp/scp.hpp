@@ -70,11 +70,11 @@ five_var bernsteinCoeffOrder10(float n, float tmin, float tmax, AXXf t_actual, i
 five_var computeBernstein(AXXf tot_time, float t_fin, int num);
 AXXf stack(AXXf arr1, AXXf arr2, char ch);
 AXXf reshape(AXXf x, uint32_t r, uint32_t c);
-AXXf arctan2(AXXf arr1, AXXf arr2);
-AXXf maximum(float val, AXXf arr2);
-AXXf delete_values(float val, AXXf arr);
+// AXXf arctan2(AXXf arr1, AXXf arr2);
+// AXXf maximum(float val, AXXf arr2);
+// AXXf delete_values(float val, AXXf arr);
 AXXf block_diag(AXXf arr1, AXXf arr2);
-AXXf diff(AXXf arr);
+// AXXf diff(AXXf arr);
 
 int computeXYZ(probData &prob_data, int VERBOSE);
 
@@ -82,8 +82,8 @@ void initObstacles(probData &prob_data, int VERBOSE);
 void neigbhoringAgents(probData &prob_data, int VERBOSE);
 
 void continuousCA(probData &prob_data, int VERBOSE);
-void ondemandCA(probData &prob_data, int VERBOSE);
-int collidingStep(probData &prob_data, int VERBOSE);
+// void ondemandCA(probData &prob_data, int VERBOSE);
+// int collidingStep(probData &prob_data, int VERBOSE);
 
 void initializeOptimizer(probData &prob_data, int VERBOSE);
 void deployAgent(probData &prob_data, int VERBOSE);
